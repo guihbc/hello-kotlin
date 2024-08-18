@@ -1,0 +1,27 @@
+---
+title: Create task
+---
+sequenceDiagram
+    [POST] /task ->>+ Validate User: user_id
+    Validate User -->>- [POST] /task: [bool] user exists
+    alt invalid user
+        [POST] /task ->> [POST] /task: error 404
+    else valid user data
+        [POST] /task ->>+ Validate Tags: tag ids
+        Validate Tags -->>- [POST] /task: [bool] tags exist
+
+        alt invalid tags
+            [POST] /task ->> [POST] /task: error 400
+        else valid tags
+            [POST] /task ->>+ Validate Task: task data
+            Validate Task -->>- [POST] /task: [bool] valid task
+
+            alt invalid task data
+                [POST] /task ->> [POST] /task: error 400
+            else valid task data
+                [POST] /task ->>+ Database: save task
+                Database -->>- [POST] /task: task saved
+                [POST] /task ->> [POST] /task: returns task
+            end
+        end
+    end

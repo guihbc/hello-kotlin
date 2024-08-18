@@ -1,0 +1,31 @@
+erDiagram
+    User {
+        string id
+        string name
+        string email
+    }
+
+    Task {
+        string id
+        string title
+        string description
+        string user_id
+        boolean is_done
+    }
+
+    Tag {
+        string id
+        string title
+        string user_id
+    }
+
+    Task_Tag {
+        string task_id
+        string tag_id
+    }
+
+    User ||--o{ Task: has
+    User ||--o{ Tag: has
+
+    Task ||--o{ Task_Tag: has
+    Tag ||--o{ Task_Tag: has

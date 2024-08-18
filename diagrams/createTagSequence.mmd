@@ -1,0 +1,20 @@
+---
+title: Create Tag
+---
+sequenceDiagram
+    [POST] /Tag ->>+ Validate User: user_id
+    Validate User -->>- [POST] /Tag: [bool] user exists
+    alt invalid user
+        [POST] /Tag ->> [POST] /Tag: error 404
+    else valid user data
+        [POST] /Tag ->>+ Validate Tag: task data
+        Validate Tag -->>- [POST] /Tag: [bool] is valid data
+
+        alt invalid tag data
+            [POST] /Tag ->> [POST] /Tag: error 400
+        else valid tag data
+                [POST] /Tag ->>+ Database: save tag
+                Database -->>- [POST] /Tag: tag saved
+                [POST] /Tag ->> [POST] /Tag: returns tag
+        end
+    end
